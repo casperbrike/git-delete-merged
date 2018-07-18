@@ -1,0 +1,14 @@
+#!/bin/bash
+
+current_branch=$(git branch | egrep "^\*" | awk '{split($0, a, " "); print a[2]}')
+git checkout master
+merged_branches=$(git branch --merged | egrep -v "(master|staging|beta|production)")
+
+if [ -n "$merged_branches" ]
+then
+  git branch -d $merged_branches
+else
+  echo 'No merged branches'
+fi
+
+git checkout $current_branch
